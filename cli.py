@@ -1,15 +1,29 @@
-from whispercpp import Whisper, api
+#!/usr/bin/env python3
+from audio2text import AudioToText
+from pathlib import Path
+import argparse
 
-# Not really sure if this should be how things should work
-params = api.Params.from_enum(api.SAMPLING_GREEDY)
-params = params\
-    .with_language("nl")\
-    .with_print_progress(True)\
-    .with_print_realtime(True)\
-    .with_print_timestamps(True)\
-    .build()
+parser = argparse.ArgumentParser()
+parser.add_argument("file", help = "File to parse")
+parser.add_argument('-v', '--verbose', action="store_true")
+parser.add_argument("-o", "--output")
+parser.add_argument("-of", "--output-format",
+    choices = ["txt", "vtt", "srt", "csv", "words"],
+    default = "srt"
+)
 
-model = Whisper.from_params("large", params)
-text = model.transcribe_from_file("test/nrc-vandaag-small.wav")
-print("hoi")
-print(text)
+args = parser.parse_args()
+
+if not args.file or not args.output:
+    parser.print_help()
+else:
+    a2t = AudioToText(
+        model_path = Path("models") / "ggml-large.bin",
+        language = "nl",
+        output_type = args.output_format
+    )
+
+    in_path = Path(args.file)
+    out_path = Path(args.output)
+
+    a2t.transcribe(in_path, out_path)
