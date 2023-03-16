@@ -2,3 +2,4 @@ test/*
 .env
 models/*
 whispercpp
+tmp/*
