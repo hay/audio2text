@@ -1,6 +1,10 @@
 # audio2text
 > Python command line utility wrappers for Whispercpp and other speech-to-text utilities
 
+## Introduction
+This is mainly a set of useful scripts to automate Whispercpp processing, including:
+* Automatic conversion of any video or audio format `ffmpeg` supports to the WAV format Whispercpp needs
+
 ## Install
 1. You need to have a working executable version of [whisper.cpp](https://github.com/ggerganov/whisper.cpp),
    you can either place that in the root of this repo as `whispercpp` or give the
