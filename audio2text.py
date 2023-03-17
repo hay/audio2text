@@ -10,7 +10,8 @@ class AudioToText:
         output_type = "vtt",
         processors = 1,
         verbose = False,
-        diarize = False
+        diarize = False,
+        speed_up = False
     ):
         self.model_path = model_path
         self.language = language
@@ -18,6 +19,7 @@ class AudioToText:
         self.processors = processors
         self.verbose = verbose
         self.diarize = diarize
+        self.speed_up = speed_up
         self._log(f"Initialized AudioToText")
 
     def _log(self, msg):
@@ -58,12 +60,14 @@ class AudioToText:
             "--file", str(in_path.resolve()),
             "-l", self.language,
             f"--output-{self.output_type}",
-            "-of", str(out_path.resolve()),
-            "-p", str(self.processors)
+            "-of", str(out_path.resolve())
         ]
 
         if self.diarize:
             cmd.append("--diarize 1")
+
+        if self.speed_up:
+            cmd.append("--speed-up 1")
 
         command = " ".join(cmd)
         self._log(f"Executing whisper command '{command}'")

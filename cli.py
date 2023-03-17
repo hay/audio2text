@@ -19,7 +19,8 @@ parser.add_argument("-of", "--output-format",
     choices = ["txt", "vtt", "srt", "csv", "words"],
     default = "srt"
 )
-parser.add_argument('-v', '--verbose', action="store_true")
+parser.add_argument("-su", "--speed-up", action = "store_true")
+parser.add_argument('-v', '--verbose', action = "store_true")
 
 args = parser.parse_args()
 
@@ -31,6 +32,7 @@ else:
         model_path = args.model_path,
         language = args.language,
         output_type = args.output_format,
+        speed_up = args.speed_up,
         verbose = args.verbose
     )
 
