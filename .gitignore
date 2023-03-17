@@ -1,5 +1,6 @@
 test/*
+!test/berliner.ogg
 .env
-models/*
+models/*.bin
 whispercpp
 tmp/*
