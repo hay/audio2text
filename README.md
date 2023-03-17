@@ -23,9 +23,17 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+
+### `audio2text.py`
 To convert the given `berliner.ogg` file in the test directory to a CSV file
 ```bash
 ./audio2text.py -i test/berliner.ogg -o test/berliner -of CSV
+```
+
+### `srtparse.py`
+Converts SRT files to JSON, CSV and TXT using [dataknead](github.com/hay/dataknead).
+```bash
+./srtparse.py -i test/berliner.srt -o test/berliner.csv
 ```
 
 ## Troubleshooting
