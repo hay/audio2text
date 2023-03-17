@@ -1,5 +1,5 @@
 # audio2text
-> Utility wrappers for Whispercpp and other speech-to-text utilities
+> Python command line utility wrappers for Whispercpp and other speech-to-text utilities
 
 ## Install
 1. You need to have a working executable version of [whisper.cpp](https://github.com/ggerganov/whisper.cpp),
@@ -25,7 +25,7 @@ To convert the given `berliner.ogg` file in the test directory to a CSV file
 ```
 
 ## Troubleshooting
-If you add the `-v` (verbose) flag `wdreconcile` will give much more debug information.
+If you add the `-v` (verbose) flag `audio2text` will give much more debug information.
 
 ## All options
 You'll get this when doing `audio2text.py -h`
