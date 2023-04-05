@@ -3,14 +3,15 @@
 
 ## Introduction
 This is mainly a set of useful scripts to automate Whispercpp processing, including:
-* Automatic conversion of any video or audio format `ffmpeg` supports to the WAV format Whispercpp needs
+* Automatic conversion of any video or audio format `ffmpeg` supports to the WAV format Whispercpp needs.
+* Conversion of the transcripts to CSV, SRT, TXT, VTT and WTS (karaoke subtitles).
 
 ## Install
 1. You need to have a working executable version of [whisper.cpp](https://github.com/ggerganov/whisper.cpp),
    you can either place that in the root of this repo as `whispercpp` or give the
    path using the `-w` flag
 2. Place your models in the `models` folder. By default `audio2text.py` will
-   look for `ggml-large.bin` in the models folder
+   look for `ggml-large.bin` in the models folder. You can also use the `-m` flag to give a path to the model.
 3. `ffmpeg` is required and should be somewhere in your `$PATH`
 4. You might want to make a virtual environment and then install the `requirements.txt`, e.g.
 
