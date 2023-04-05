@@ -31,6 +31,12 @@ To convert the given `berliner.ogg` file in the test directory to a CSV file
 ./audio2text.py -i test/berliner.ogg -o test/berliner -of csv
 ```
 
+To prevent duplication of all possible command line options for `whisper.cpp` you can use the `-wa` / `--whisper-args` flag to pass extra command line options to the whisper.cpp executable:
+
+```bash
+./audio2text.py -i test/berliner.ogg -o test/berliner -of csv -wa="--threads 8"
+```
+
 ### `srtparse.py`
 Converts SRT files to JSON, CSV and TXT using [dataknead](github.com/hay/dataknead).
 ```bash

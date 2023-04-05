@@ -24,6 +24,9 @@ parser.add_argument("-v", "--verbose", action = "store_true")
 parser.add_argument("-w", "--whisper-path",
     default = Path("./whispercpp")
 )
+parser.add_argument("-wa", "--whisper-args",
+    help = "Give a string of extra parameters to give to the whisper executable"
+)
 
 args = parser.parse_args()
 
@@ -37,7 +40,8 @@ else:
         language = args.language,
         output_type = args.output_format,
         speed_up = args.speed_up,
-        verbose = args.verbose
+        verbose = args.verbose,
+        whisper_args = args.whisper_args
     )
 
     in_path = Path(args.input)

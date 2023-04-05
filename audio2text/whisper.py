@@ -13,7 +13,8 @@ class WhisperTranscriber:
         processors = DEFAULT_PROCESSOR_COUNT,
         verbose = None,
         diarize = None,
-        speed_up = None
+        speed_up = None,
+        whisper_args = None
     ):
         self.whisper_path = Path(whisper_path)
         self.model_path = Path(model_path)
@@ -23,6 +24,7 @@ class WhisperTranscriber:
         self.verbose = verbose or False
         self.diarize = diarize or False
         self.speed_up = speed_up or False
+        self.whisper_args = whisper_args or False
         self._log(f"Initialized AudioToText")
 
     def _log(self, msg):
@@ -69,6 +71,9 @@ class WhisperTranscriber:
 
         if self.speed_up:
             cmd.append("--speed-up 1")
+
+        if self.whisper_args:
+            cmd.append(self.whisper_args)
 
         if out_path:
             cmd.append(f"--output-{self.output_type}")
