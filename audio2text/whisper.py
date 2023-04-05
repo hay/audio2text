@@ -15,8 +15,8 @@ class WhisperTranscriber:
         diarize = None,
         speed_up = None
     ):
-        self.whisper_path = whisper_path
-        self.model_path = model_path
+        self.whisper_path = Path(whisper_path)
+        self.model_path = Path(model_path)
         self.language = language or DEFAULT_LANG
         self.output_type = output_type or DEFAULT_OUTPUT_TYPE
         self.processors = processors or DEFAULT_PROCESSOR_COUNT
