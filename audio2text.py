@@ -33,6 +33,11 @@ parser.add_argument("-of", "--output-format",
     help = "Output format, when giving 'all', all formats will be used"
 )
 
+parser.add_argument("-kt", "--keep-temp-files",
+    action = "store_true",
+    help = "Keep temporary files after transcribing (default is to remove them)"
+)
+
 parser.add_argument("-su", "--speed-up", action = "store_true")
 parser.add_argument("-u", "--url",
     help = "Give a URL to an audio file to download (e.g. mp3)"
@@ -73,6 +78,7 @@ else:
     )
 
     logger.debug("")
+    logger.debug(f"Command line arguments: {args}")
     logger.debug(f"Logging setup, level ${loglevel}")
     logger.info("📝 Start transcribing")
 
@@ -83,7 +89,8 @@ else:
         language = args.language,
         output_type = args.output_format,
         speed_up = args.speed_up,
-        whisper_args = args.whisper_args
+        whisper_args = args.whisper_args,
+        keep_tmp_file = args.keep_temp_files
     )
 
     if args.url:
@@ -98,4 +105,11 @@ else:
     else:
         out_path = False
 
-    whisper.transcribe(in_path, out_path)
+    try:
+        whisper.transcribe(in_path, out_path)
+    except Exception as e:
+        msg = f"Transcribe exception: {e}"
+        logger.error(msg)
+        sys.exit(msg)
+
+    logger.info("Done")

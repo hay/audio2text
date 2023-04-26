@@ -17,6 +17,7 @@ class WhisperTranscriber:
         verbose = None,
         diarize = None,
         speed_up = None,
+        keep_tmp_file = None,
         whisper_args = None
     ):
         self.whisper_path = Path(whisper_path)
@@ -28,9 +29,13 @@ class WhisperTranscriber:
         self.diarize = diarize or False
         self.speed_up = speed_up or False
         self.whisper_args = whisper_args or False
+        self.keep_tmp_file = keep_tmp_file or False
         logger.info(f"Initialized AudioToText")
 
     def convert(self, in_path):
+        if not Path(in_path).is_file():
+            raise FileNotFoundError(f"File not found: {in_path}")
+
         tmp_file_path = get_tmp_file_path(suffix = ".wav")
 
         logger.info(f"Converting {in_path} to {tmp_file_path}")
@@ -54,8 +59,12 @@ class WhisperTranscriber:
         logger.info(f"Transcribing {in_path} as {out_path}")
         tmp_file = self.convert(in_path)
         self.transcribe_processed_wav(tmp_file, out_path)
-        logger.info(f"Removing tmp file {tmp_file}")
-        tmp_file.unlink()
+
+        if self.keep_tmp_file:
+            logger.info(f"Keeping tmp file {tmp_file}")
+        else:
+            logger.info(f"Removing tmp file {tmp_file}")
+            tmp_file.unlink()
 
     def transcribe_processed_wav(self, in_path, out_path = False):
         cmd = [
