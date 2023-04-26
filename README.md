@@ -26,9 +26,14 @@ pip install -r requirements.txt
 ## Usage
 
 ### `audio2text.py`
-To convert the given `berliner.ogg` file in the test directory to a CSV file
+To convert the given `berliner.ogg` file in the test directory to a CSV file (note that you don't need to give an extension)
 ```bash
 ./audio2text.py -i test/berliner.ogg -o test/berliner -of csv
+```
+
+If you want multiple output formats you can separate them by comma
+```bash
+./audio2text.py -i test/berliner.ogg -o test/berliner -of srt,txt
 ```
 
 When giving the argument `all` to the `-of/--output-format` flag all Whisper-supported formats will be written

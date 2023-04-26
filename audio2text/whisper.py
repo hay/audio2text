@@ -89,7 +89,9 @@ class WhisperTranscriber:
                 for fmt in WHISPER_OUTPUT_FORMATS:
                     cmd.append(f"--output-{fmt}")
             else:
-                cmd.append(f"--output-{self.output_type}")
+                # Split by comma to make multiple formats work
+                for fmt in self.output_type.split(","):
+                    cmd.append(f"--output-{fmt}")
 
             cmd.append(f"-of {out_path.resolve()}")
 
