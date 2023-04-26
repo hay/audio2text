@@ -71,8 +71,7 @@ else:
         loghandlers.append( logging.FileHandler(args.log_file, "a") )
 
     logging.basicConfig(
-        datefmt = '%H:%M:%S',
-        format = '%(asctime)s,%(msecs)d:%(name)s:%(levelname)s %(message)s',
+        format = '[%(asctime)s:%(name)s:%(levelname)s] %(message)s',
         handlers = loghandlers,
         level = loglevel
     )
@@ -94,7 +93,12 @@ else:
     )
 
     if args.url:
-        file_path = download_tmp_file(args.url)
+        try:
+            file_path = download_tmp_file(args.url)
+        except Exception as e:
+            msg = f"Transcribe exception: {e}"
+            logger.error(msg)
+            sys.exit(msg)
     else:
         file_path = args.input
 
@@ -111,5 +115,12 @@ else:
         msg = f"Transcribe exception: {e}"
         logger.error(msg)
         sys.exit(msg)
+
+    # Delete downloaded file if we've got an URL
+    if args.url and not args.keep_temp_files:
+        logger.debug(f"Deleting <{file_path}>")
+        file_path.unlink()
+    else:
+        logger.debug(f"Keeping <{file_path}>")
 
     logger.info("Done")
