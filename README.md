@@ -31,6 +31,11 @@ To convert the given `berliner.ogg` file in the test directory to a CSV file
 ./audio2text.py -i test/berliner.ogg -o test/berliner -of csv
 ```
 
+When giving the argument `all` to the `-of/--output-format` flag all Whisper-supported formats will be written
+```bash
+./audio2text.py -i test/berliner.ogg -o test/berliner -of all
+```
+
 To prevent duplication of all possible command line options for `whisper.cpp` you can use the `-wa` / `--whisper-args` flag to pass extra command line options to the whisper.cpp executable:
 
 ```bash
@@ -47,6 +52,12 @@ To enable logging to a file use the `-lf/--log-file` flag, optionally combined w
 
 ```bash
 ./audio2text.py -u https://www.bykr.org/test/berliner.mp3 -v -lf log.txt
+```
+
+To write all files and the log file to a non-existing directory you can use the `-od/--output-directory` flag:
+
+```bash
+./audio2text.py -u https://www.bykr.org/test/berliner.mp3 -of all -o out/text -v -lf out/log.log -od out
 ```
 
 ### `srtparse.py`

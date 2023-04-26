@@ -22,6 +22,9 @@ parser.add_argument("-m", "--model-path",
     default = Path("models") / "ggml-large.bin"
 )
 parser.add_argument("-o", "--output")
+parser.add_argument("-od", "--output-directory",
+    help = "When giving this argument, a directory will be created before all other commands are run"
+)
 
 OF_FORMATS = WHISPER_OUTPUT_FORMATS.copy().append("all")
 parser.add_argument("-of", "--output-format",
@@ -52,6 +55,10 @@ else:
     loghandlers = [
         logging.StreamHandler(sys.stdout)
     ]
+
+    if args.output_directory:
+        logging.info(f"Creating output direcory: {args.output_directory}")
+        Path(args.output_directory).mkdir(parents = True, exist_ok = True)
 
     if args.log_file:
         loghandlers.append( logging.FileHandler(args.log_file, "a") )

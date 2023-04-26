@@ -7,3 +7,4 @@ models/*.bin
 whispercpp
 tmp/*
 log.txt
+out
