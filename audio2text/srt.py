@@ -1,7 +1,10 @@
 from . import DEFAULT_SRTPARSER_OUTPUT, SRTPARSER_OUTPUT_FORMATS
 from dataknead import Knead
 from pathlib import Path
+import logging
 import srt
+
+logger = logging.getLogger(__name__)
 
 # Be nice for CSV users
 CSV_FIELDNAMES = ["index", "start", "end", "content", "proprietary"]
@@ -18,12 +21,8 @@ class SrtParser:
         self.output_format = output_format or DEFAULT_SRTPARSER_OUTPUT
         self.trim = trim or True
         self.verbose = verbose or False
-        self._log(f"Initialized SrtParser")
-        self._log(f"output_format: {self.output_format}")
-
-    def _log(self, msg):
-        if self.verbose:
-            print(msg)
+        logger.debug(f"Initialized SrtParser")
+        logger.debug(f"output_format: {self.output_format}")
 
     def convert(self, in_path, out_path = None):
         with open(in_path) as f:

@@ -39,6 +39,16 @@ To prevent duplication of all possible command line options for `whisper.cpp` yo
 
 You can also use the `-u/--url` flag to give an URL to a MP3 file (or any other audio format `ffmpeg` supports). This will be downloaded to the `tmp` directory.
 
+```bash
+./audio2text.py -u https://www.bykr.org/test/berliner.mp3
+```
+
+To enable logging to a file use the `-lf/--log-file` flag, optionally combined with the `-v/--verbose` flag:
+
+```bash
+./audio2text.py -u https://www.bykr.org/test/berliner.mp3 -v -lf log.txt
+```
+
 ### `srtparse.py`
 Converts SRT files to JSON, CSV and TXT using [dataknead](github.com/hay/dataknead).
 ```bash

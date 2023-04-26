@@ -2,7 +2,10 @@ from . import DEFAULT_LANG, DEFAULT_PROCESSOR_COUNT, DEFAULT_OUTPUT_TYPE
 from .file import get_tmp_file_path
 from pathlib import Path
 import ffmpeg
+import logging
 import subprocess
+
+logger = logging.getLogger(__name__)
 
 class WhisperTranscriber:
     def __init__(self,
@@ -25,16 +28,12 @@ class WhisperTranscriber:
         self.diarize = diarize or False
         self.speed_up = speed_up or False
         self.whisper_args = whisper_args or False
-        self._log(f"Initialized AudioToText")
-
-    def _log(self, msg):
-        if self.verbose:
-            print(msg)
+        logger.info(f"Initialized AudioToText")
 
     def convert(self, in_path):
         tmp_file_path = get_tmp_file_path(suffix = ".wav")
 
-        self._log(f"Converting {in_path} to {tmp_file_path}")
+        logger.info(f"Converting {in_path} to {tmp_file_path}")
 
         try :
             (
@@ -52,10 +51,10 @@ class WhisperTranscriber:
         return tmp_file_path
 
     def transcribe(self, in_path, out_path):
-        self._log(f"Transcribing {in_path} as {out_path}")
+        logger.info(f"Transcribing {in_path} as {out_path}")
         tmp_file = self.convert(in_path)
         self.transcribe_processed_wav(tmp_file, out_path)
-        self._log(f"Removing tmp file {tmp_file}")
+        logger.info(f"Removing tmp file {tmp_file}")
         tmp_file.unlink()
 
     def transcribe_processed_wav(self, in_path, out_path = False):
@@ -79,8 +78,6 @@ class WhisperTranscriber:
             cmd.append(f"--output-{self.output_type}")
             cmd.append(f"-of {out_path.resolve()}")
 
-        print(cmd)
-
         command = " ".join(cmd)
-        self._log(f"Executing whisper command '{command}'")
+        logger.debug(f"Executing whisper command '{command}'")
         subprocess.check_call(command, shell = True)

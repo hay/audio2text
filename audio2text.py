@@ -3,6 +3,7 @@ from audio2text.url import download_tmp_file
 from audio2text.whisper import WhisperTranscriber
 from pathlib import Path
 import argparse
+import logging
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-di", "--diarize",
@@ -11,6 +12,9 @@ parser.add_argument("-di", "--diarize",
 )
 parser.add_argument("-i", "--input", help = "File to parse")
 parser.add_argument("-l", "--language")
+parser.add_argument("-lf", "--log-file",
+    help = "Path to a logging file"
+)
 parser.add_argument("-m", "--model-path",
     help = "Path to model",
     default = Path("models") / "ggml-large.bin"
@@ -37,6 +41,19 @@ args = parser.parse_args()
 if (not args.input) and (not args.url):
     parser.print_help()
 else:
+    loglevel = logging.DEBUG if args.verbose else logging.WARNING
+
+    logging.basicConfig(
+        filename = args.log_file,
+        filemode = 'a',
+        format = '%(asctime)s,%(msecs)d:%(name)s:%(levelname)s %(message)s',
+        datefmt = '%H:%M:%S',
+        level = loglevel
+    )
+
+    logging.info(f"Logging setup, level ${loglevel}")
+    logging.info("*** STARTING WHISPER TRANSCRIBER ***")
+
     whisper = WhisperTranscriber(
         model_path = args.model_path,
         whisper_path = args.whisper_path,
@@ -44,7 +61,6 @@ else:
         language = args.language,
         output_type = args.output_format,
         speed_up = args.speed_up,
-        verbose = args.verbose,
         whisper_args = args.whisper_args
     )
 
