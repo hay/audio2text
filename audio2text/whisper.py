@@ -1,4 +1,4 @@
-from . import DEFAULT_LANG, DEFAULT_PROCESSOR_COUNT, DEFAULT_OUTPUT_TYPE
+from . import DEFAULT_LANG, DEFAULT_PROCESSOR_COUNT, DEFAULT_OUTPUT_TYPE, WHISPER_OUTPUT_FORMATS
 from .file import get_tmp_file_path
 from pathlib import Path
 import ffmpeg
@@ -75,7 +75,16 @@ class WhisperTranscriber:
             cmd.append(self.whisper_args)
 
         if out_path:
-            cmd.append(f"--output-{self.output_type}")
+            # When having the special output type 'all', we're getting all
+            # output formats
+            if self.output_type == "all":
+                logger.debug("Outputting to all output formats")
+
+                for fmt in WHISPER_OUTPUT_FORMATS:
+                    cmd.append(f"--output-{fmt}")
+            else:
+                cmd.append(f"--output-{self.output_type}")
+
             cmd.append(f"-of {out_path.resolve()}")
 
         command = " ".join(cmd)

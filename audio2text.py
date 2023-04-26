@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
+from audio2text import WHISPER_OUTPUT_FORMATS
 from audio2text.url import download_tmp_file
 from audio2text.whisper import WhisperTranscriber
 from pathlib import Path
 import argparse
 import logging
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-di", "--diarize",
@@ -20,10 +22,14 @@ parser.add_argument("-m", "--model-path",
     default = Path("models") / "ggml-large.bin"
 )
 parser.add_argument("-o", "--output")
+
+OF_FORMATS = WHISPER_OUTPUT_FORMATS.copy().append("all")
 parser.add_argument("-of", "--output-format",
-    choices = ["txt", "vtt", "srt", "csv", "words"],
-    default = "srt"
+    choices = OF_FORMATS,
+    default = "srt",
+    help = "Output format, when giving 'all', all formats will be used"
 )
+
 parser.add_argument("-su", "--speed-up", action = "store_true")
 parser.add_argument("-u", "--url",
     help = "Give a URL to an audio file to download (e.g. mp3)"
@@ -43,14 +49,21 @@ if (not args.input) and (not args.url):
 else:
     loglevel = logging.DEBUG if args.verbose else logging.WARNING
 
+    loghandlers = [
+        logging.StreamHandler(sys.stdout)
+    ]
+
+    if args.log_file:
+        loghandlers.append( logging.FileHandler(args.log_file, "a") )
+
     logging.basicConfig(
-        filename = args.log_file,
-        filemode = 'a',
-        format = '%(asctime)s,%(msecs)d:%(name)s:%(levelname)s %(message)s',
         datefmt = '%H:%M:%S',
+        format = '%(asctime)s,%(msecs)d:%(name)s:%(levelname)s %(message)s',
+        handlers = loghandlers,
         level = loglevel
     )
 
+    logging.info("")
     logging.info(f"Logging setup, level ${loglevel}")
     logging.info("*** STARTING WHISPER TRANSCRIBER ***")
 
