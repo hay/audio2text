@@ -12,16 +12,22 @@ parser.add_argument("-di", "--diarize",
     help = "Diarize audio (only works for natural stereo audio)",
     action = "store_true"
 )
-parser.add_argument("-i", "--input", help = "File to parse")
-parser.add_argument("-l", "--language")
+parser.add_argument("-i", "--input",
+    help = "Audio file to transcribe, anything that ffmpeg supports will work"
+)
+parser.add_argument("-l", "--language",
+    help = "Language of audio file, if not given Whisper will try to autodetect this"
+)
 parser.add_argument("-lf", "--log-file",
-    help = "Path to a logging file"
+    help = "Log messages to a logging file with this path, will fail if the directory does not exist (use --od to prevent that)"
 )
 parser.add_argument("-m", "--model-path",
-    help = "Path to model",
+    help = "Path to model you want to use for transcribing",
     default = Path("models") / "ggml-large.bin"
 )
-parser.add_argument("-o", "--output")
+parser.add_argument("-o", "--output",
+    help = "Path to output file, you don't need to give an extension"
+)
 parser.add_argument("-od", "--output-directory",
     help = "When giving this argument, a directory will be created before all other commands are run"
 )
@@ -38,13 +44,16 @@ parser.add_argument("-kt", "--keep-temp-files",
     help = "Keep temporary files after transcribing (default is to remove them)"
 )
 
-parser.add_argument("-su", "--speed-up", action = "store_true")
 parser.add_argument("-u", "--url",
     help = "Give a URL to an audio file to download (e.g. mp3)"
 )
-parser.add_argument("-v", "--verbose", action = "store_true")
+parser.add_argument("-v", "--verbose",
+    action = "store_true",
+    help = "Print debug information"
+)
 parser.add_argument("-w", "--whisper-path",
-    default = Path("./whispercpp")
+    default = Path("./whispercpp"),
+    help = "Path to the Whisper executable (defaults to ./whispercpp)"
 )
 parser.add_argument("-wa", "--whisper-args",
     help = "Give a string of extra parameters to give to the whisper executable"
@@ -87,7 +96,6 @@ else:
         diarize = args.diarize,
         language = args.language,
         output_type = args.output_format,
-        speed_up = args.speed_up,
         whisper_args = args.whisper_args,
         keep_tmp_file = args.keep_temp_files
     )

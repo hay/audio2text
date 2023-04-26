@@ -77,9 +77,6 @@ class WhisperTranscriber:
         if self.diarize:
             cmd.append("--diarize 1")
 
-        if self.speed_up:
-            cmd.append("--speed-up 1")
-
         if self.whisper_args:
             cmd.append(self.whisper_args)
 

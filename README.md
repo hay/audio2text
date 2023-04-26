@@ -72,23 +72,30 @@ If you add the `-v` (verbose) flag `audio2text` will give much more debug inform
 ## All options
 You'll get this when doing `audio2text.py -h`
 
-```bash
+```
 usage: audio2text.py [-h] [-di] [-i INPUT] [-l LANGUAGE] [-lf LOG_FILE]
                      [-m MODEL_PATH] [-o OUTPUT] [-od OUTPUT_DIRECTORY]
-                     [-of OUTPUT_FORMAT] [-kt] [-su] [-u URL] [-v]
-                     [-w WHISPER_PATH] [-wa WHISPER_ARGS]
+                     [-of OUTPUT_FORMAT] [-kt] [-u URL] [-v] [-w WHISPER_PATH]
+                     [-wa WHISPER_ARGS]
 
 options:
   -h, --help            show this help message and exit
   -di, --diarize        Diarize audio (only works for natural stereo audio)
   -i INPUT, --input INPUT
-                        File to parse
+                        Audio file to transcribe, anything that ffmpeg
+                        supports will work
   -l LANGUAGE, --language LANGUAGE
+                        Language of audio file, if not given Whisper will try
+                        to autodetect this
   -lf LOG_FILE, --log-file LOG_FILE
-                        Path to a logging file
+                        Log messages to a logging file with this path, will
+                        fail if the directory does not exist (use --od to
+                        prevent that)
   -m MODEL_PATH, --model-path MODEL_PATH
-                        Path to model
+                        Path to model you want to use for transcribing
   -o OUTPUT, --output OUTPUT
+                        Path to output file, you don't need to give an
+                        extension
   -od OUTPUT_DIRECTORY, --output-directory OUTPUT_DIRECTORY
                         When giving this argument, a directory will be created
                         before all other commands are run
@@ -98,10 +105,11 @@ options:
   -kt, --keep-temp-files
                         Keep temporary files after transcribing (default is to
                         remove them)
-  -su, --speed-up
   -u URL, --url URL     Give a URL to an audio file to download (e.g. mp3)
-  -v, --verbose
+  -v, --verbose         Print debug information
   -w WHISPER_PATH, --whisper-path WHISPER_PATH
+                        Path to the Whisper executable (defaults to
+                        ./whispercpp)
   -wa WHISPER_ARGS, --whisper-args WHISPER_ARGS
                         Give a string of extra parameters to give to the
                         whisper executable
