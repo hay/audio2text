@@ -73,8 +73,10 @@ If you add the `-v` (verbose) flag `audio2text` will give much more debug inform
 You'll get this when doing `audio2text.py -h`
 
 ```bash
-usage: audio2text.py [-h] [-di] [-i INPUT] [-l LANGUAGE] [-m MODEL_PATH] [-o OUTPUT] [-of {txt,vtt,srt,csv,words}] [-su] [-v]
-                     [-w WHISPER_PATH]
+usage: audio2text.py [-h] [-di] [-i INPUT] [-l LANGUAGE] [-lf LOG_FILE]
+                     [-m MODEL_PATH] [-o OUTPUT] [-od OUTPUT_DIRECTORY]
+                     [-of OUTPUT_FORMAT] [-kt] [-su] [-u URL] [-v]
+                     [-w WHISPER_PATH] [-wa WHISPER_ARGS]
 
 options:
   -h, --help            show this help message and exit
@@ -82,13 +84,27 @@ options:
   -i INPUT, --input INPUT
                         File to parse
   -l LANGUAGE, --language LANGUAGE
+  -lf LOG_FILE, --log-file LOG_FILE
+                        Path to a logging file
   -m MODEL_PATH, --model-path MODEL_PATH
                         Path to model
   -o OUTPUT, --output OUTPUT
-  -of {txt,vtt,srt,csv,words}, --output-format {txt,vtt,srt,csv,words}
+  -od OUTPUT_DIRECTORY, --output-directory OUTPUT_DIRECTORY
+                        When giving this argument, a directory will be created
+                        before all other commands are run
+  -of OUTPUT_FORMAT, --output-format OUTPUT_FORMAT
+                        Output format, when giving 'all', all formats will be
+                        used
+  -kt, --keep-temp-files
+                        Keep temporary files after transcribing (default is to
+                        remove them)
   -su, --speed-up
+  -u URL, --url URL     Give a URL to an audio file to download (e.g. mp3)
   -v, --verbose
   -w WHISPER_PATH, --whisper-path WHISPER_PATH
+  -wa WHISPER_ARGS, --whisper-args WHISPER_ARGS
+                        Give a string of extra parameters to give to the
+                        whisper executable
  ```
 
 ## License
