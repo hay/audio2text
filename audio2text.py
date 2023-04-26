@@ -34,7 +34,7 @@ parser.add_argument("-wa", "--whisper-args",
 
 args = parser.parse_args()
 
-if not args.input:
+if (not args.input) and (not args.url):
     parser.print_help()
 else:
     whisper = WhisperTranscriber(
