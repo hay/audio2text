@@ -46,21 +46,23 @@ parser.add_argument("-wa", "--whisper-args",
 )
 
 args = parser.parse_args()
+logger = logging.getLogger(__name__)
 
 if (not args.input) and (not args.url):
     parser.print_help()
 else:
-    loglevel = logging.DEBUG if args.verbose else logging.WARNING
+    loglevel = logging.DEBUG if args.verbose else logging.INFO
 
     loghandlers = [
         logging.StreamHandler(sys.stdout)
     ]
 
     if args.output_directory:
-        logging.info(f"Creating output direcory: {args.output_directory}")
+        logger.info(f"Creating output direcory: {args.output_directory}")
         Path(args.output_directory).mkdir(parents = True, exist_ok = True)
 
     if args.log_file:
+        print(f"Writing to log file {args.log_file}")
         loghandlers.append( logging.FileHandler(args.log_file, "a") )
 
     logging.basicConfig(
@@ -70,9 +72,9 @@ else:
         level = loglevel
     )
 
-    logging.info("")
-    logging.info(f"Logging setup, level ${loglevel}")
-    logging.info("*** STARTING WHISPER TRANSCRIBER ***")
+    logger.debug("")
+    logger.debug(f"Logging setup, level ${loglevel}")
+    logger.info("📝 Start transcribing")
 
     whisper = WhisperTranscriber(
         model_path = args.model_path,
