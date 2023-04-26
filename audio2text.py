@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from audio2text.url import download_tmp_file
 from audio2text.whisper import WhisperTranscriber
 from pathlib import Path
 import argparse
@@ -20,6 +21,9 @@ parser.add_argument("-of", "--output-format",
     default = "srt"
 )
 parser.add_argument("-su", "--speed-up", action = "store_true")
+parser.add_argument("-u", "--url",
+    help = "Give a URL to an audio file to download (e.g. mp3)"
+)
 parser.add_argument("-v", "--verbose", action = "store_true")
 parser.add_argument("-w", "--whisper-path",
     default = Path("./whispercpp")
@@ -44,7 +48,12 @@ else:
         whisper_args = args.whisper_args
     )
 
-    in_path = Path(args.input)
+    if args.url:
+        file_path = download_tmp_file(args.url)
+    else:
+        file_path = args.input
+
+    in_path = Path(file_path)
 
     if args.output:
         out_path = Path(args.output)

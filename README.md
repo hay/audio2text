@@ -37,6 +37,8 @@ To prevent duplication of all possible command line options for `whisper.cpp` yo
 ./audio2text.py -i test/berliner.ogg -o test/berliner -of csv -wa="--threads 8"
 ```
 
+You can also use the `-u/--url` flag to give an URL to a MP3 file (or any other audio format `ffmpeg` supports). This will be downloaded to the `tmp` directory.
+
 ### `srtparse.py`
 Converts SRT files to JSON, CSV and TXT using [dataknead](github.com/hay/dataknead).
 ```bash

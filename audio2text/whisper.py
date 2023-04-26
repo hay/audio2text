@@ -1,6 +1,6 @@
-from pathlib import Path
-from shortuuid import uuid
 from . import DEFAULT_LANG, DEFAULT_PROCESSOR_COUNT, DEFAULT_OUTPUT_TYPE
+from .file import get_tmp_file_path
+from pathlib import Path
 import ffmpeg
 import subprocess
 
@@ -32,15 +32,15 @@ class WhisperTranscriber:
             print(msg)
 
     def convert(self, in_path):
-        tmp_file = Path("tmp") / f"{uuid()}.wav"
+        tmp_file_path = get_tmp_file_path(suffix = ".wav")
 
-        self._log(f"Converting {in_path} to {tmp_file}")
+        self._log(f"Converting {in_path} to {tmp_file_path}")
 
         try :
             (
                 ffmpeg.input(in_path)
                 .output(
-                    str(tmp_file.resolve()),
+                    str(tmp_file_path.resolve()),
                     acodec = "pcm_s16le",
                     ac = 2,
                     ar = 16000
@@ -49,7 +49,7 @@ class WhisperTranscriber:
         except ffmpeg.Error as e:
             raise RuntimeError(f"Failed to load audio: {e.stderr.decode()}")
 
-        return tmp_file
+        return tmp_file_path
 
     def transcribe(self, in_path, out_path):
         self._log(f"Transcribing {in_path} as {out_path}")

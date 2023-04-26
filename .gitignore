@@ -1,5 +1,6 @@
 test/*
 !test/berliner.ogg
+!test/berliner.mp3
 !test/berliner.srt
 .env
 models/*.bin
