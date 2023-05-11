@@ -53,9 +53,10 @@ with open(output_dir / "item.json", "w") as f:
     f.write(json.dumps(podcast, indent = 4))
 
 # Okay, let's make a command
+url = '"' + item["audio_link"] + '"'
 cmd = [
     "./audio2text.py",
-    "--url", item["audio_link"],
+    "--url", url,
     "--output-format", "srt,txt,csv",
     "--output", f"output/{item_id}/text",
     "--verbose",
