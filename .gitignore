@@ -1,3 +1,5 @@
+*.csv
+*.json
 test/*
 !test/berliner.ogg
 !test/berliner.mp3
