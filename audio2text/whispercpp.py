@@ -4,6 +4,7 @@ from pathlib import Path
 import ffmpeg
 import logging
 import subprocess
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +31,7 @@ class CppTranscriber:
         self.speed_up = speed_up or False
         self.whisper_args = whisper_args or False
         self.keep_tmp_file = keep_tmp_file or False
-        logger.info(f"Initialized AudioToText")
+        logger.info(f"Initialized whispercpp implementation")
 
     def transcribe(self, in_path, out_path):
         logger.info(f"Transcribing {in_path} as {out_path}")
@@ -97,4 +98,7 @@ class CppTranscriber:
 
         command = " ".join(cmd)
         logger.debug(f"Executing whisper command '{command}'")
+        ts = time.time()
         subprocess.check_call(command, shell = True)
+        delta = round(time.time() - ts, 3)
+        logger.debug(f"Transcription (wall time) took {delta}s")
