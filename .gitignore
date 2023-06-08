@@ -8,3 +8,6 @@ whispercpp
 tmp/*
 log.txt
 out
+output/*
+*.json
+*.csv
