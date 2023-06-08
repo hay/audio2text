@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from audio2text import WHISPER_OUTPUT_FORMATS
+from audio2text import WHISPER_OUTPUT_FORMATS, WHISPER_IMPLEMENTATIONS, WHISPER_DEFAULT_IMPLEMENTATION
 from audio2text.url import download_tmp_file
-from audio2text.whisper import WhisperTranscriber
+from audio2text.whisper import Transcriber
 from pathlib import Path
 import argparse
 import logging
@@ -58,6 +58,11 @@ parser.add_argument("-w", "--whisper-path",
 parser.add_argument("-wa", "--whisper-args",
     help = "Give a string of extra parameters to give to the whisper executable"
 )
+parser.add_argument("-wi", "--whisper-implementation",
+    help = "Which Whiser implementation to use",
+    choices = WHISPER_IMPLEMENTATIONS,
+    default = WHISPER_DEFAULT_IMPLEMENTATION
+)
 
 args = parser.parse_args()
 logger = logging.getLogger(__name__)
@@ -90,7 +95,8 @@ else:
     logger.debug(f"Logging setup, level ${loglevel}")
     logger.info("📝 Start transcribing")
 
-    whisper = WhisperTranscriber(
+    whisper = Transcriber(
+        implementation = args.whisper_implementation,
         model_path = args.model_path,
         whisper_path = args.whisper_path,
         diarize = args.diarize,
@@ -118,7 +124,7 @@ else:
         out_path = False
 
     try:
-        whisper.transcribe(in_path, out_path)
+        whisper.transcribe(in_path = in_path, out_path = out_path)
     except Exception as e:
         msg = f"Transcribe exception: {e}"
         logger.error(msg)
