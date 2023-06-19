@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env python3
 from pathlib import Path
 import datetime
 import json
@@ -56,6 +56,7 @@ with open(output_dir / "item.json", "w") as f:
 url = '"' + item["audio_link"] + '"'
 cmd = [
     "./audio2text.py",
+    "--language", "nl",
     "--url", url,
     "--output-format", "srt,txt,csv",
     "--output", f"output/{item_id}/text",
