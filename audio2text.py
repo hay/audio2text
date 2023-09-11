@@ -104,7 +104,7 @@ else:
         try:
             file_path = download_tmp_file(args.url)
         except Exception as e:
-            msg = f"Transcribe exception: {e}"
+            msg = f"Download exception: {e}"
             logger.error(msg)
             sys.exit(msg)
     else:
