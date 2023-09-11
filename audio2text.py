@@ -21,9 +21,9 @@ parser.add_argument("-l", "--language",
 parser.add_argument("-lf", "--log-file",
     help = "Log messages to a logging file with this path, will fail if the directory does not exist (use --od to prevent that)"
 )
-parser.add_argument("-m", "--model-path",
-    help = "Path to model you want to use for transcribing",
-    default = Path("models") / "ggml-large.bin"
+parser.add_argument("-m", "--model",
+    help = "WhisperX model you want to use for transcribing",
+    default = "large-v2"
 )
 parser.add_argument("-o", "--output",
     help = "Path to output file, you don't need to give an extension"
@@ -35,7 +35,7 @@ parser.add_argument("-od", "--output-directory",
 OF_FORMATS = WHISPER_OUTPUT_FORMATS.copy().append("all")
 parser.add_argument("-of", "--output-format",
     choices = OF_FORMATS,
-    default = "srt",
+    default = "all",
     help = "Output format, when giving 'all', all formats will be used"
 )
 
@@ -50,10 +50,6 @@ parser.add_argument("-u", "--url",
 parser.add_argument("-v", "--verbose",
     action = "store_true",
     help = "Print debug information"
-)
-parser.add_argument("-w", "--whisper-path",
-    default = Path("./whispercpp"),
-    help = "Path to the Whisper executable (defaults to ./whispercpp)"
 )
 parser.add_argument("-wa", "--whisper-args",
     help = "Give a string of extra parameters to give to the whisper executable"
@@ -91,8 +87,7 @@ else:
     logger.info("📝 Start transcribing")
 
     whisper = WhisperTranscriber(
-        model_path = args.model_path,
-        whisper_path = args.whisper_path,
+        model = args.model,
         diarize = args.diarize,
         language = args.language,
         output_type = args.output_format,
