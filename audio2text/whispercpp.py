@@ -7,7 +7,7 @@ import subprocess
 
 logger = logging.getLogger(__name__)
 
-class WhisperTranscriber:
+class WhisperCppEngine:
     def __init__(self,
         whisper_path,
         model_path,
@@ -70,9 +70,12 @@ class WhisperTranscriber:
         cmd = [
             str(self.whisper_path.resolve()),
             "--model", str(self.model_path.resolve()),
-            "--file", str(in_path.resolve()),
-            "--language", self.language
+            "--file", str(in_path.resolve())
         ]
+
+        if self.language:
+            cmd.append("--language")
+            cmd.append(self.language)
 
         if self.diarize:
             cmd.append("--diarize 1")
@@ -95,6 +98,7 @@ class WhisperTranscriber:
 
             cmd.append(f"-of {out_path.resolve()}")
 
-        command = " ".join(cmd)
+
+        command = " ".join([str(c) for c in cmd])
         logger.debug(f"Executing whisper command '{command}'")
         subprocess.check_call(command, shell = True)

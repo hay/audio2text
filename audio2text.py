@@ -1,16 +1,26 @@
 #!/usr/bin/env python3
-from audio2text import WHISPER_OUTPUT_FORMATS
+from audio2text import WHISPER_OUTPUT_FORMATS, WHISPER_ENGINES, DEFAULT_WHISPER_ENGINE
 from audio2text.url import download_tmp_file
-from audio2text.whisper import WhisperTranscriber
+from audio2text.whispercpp import WhisperCppEngine
+from audio2text.whisperx import WhisperXEngine
 from pathlib import Path
 import argparse
 import logging
 import sys
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--debug",
+    help = "Don't catch errors and halt all processes if errors occur",
+    action = "store_true"
+)
 parser.add_argument("-di", "--diarize",
     help = "Diarize audio (only works for natural stereo audio)",
     action = "store_true"
+)
+parser.add_argument("-e", "--engine",
+    help = "Engine to use",
+    choices = WHISPER_ENGINES,
+    default = DEFAULT_WHISPER_ENGINE
 )
 parser.add_argument("-i", "--input",
     help = "Audio file to transcribe, anything that ffmpeg supports will work"
@@ -24,6 +34,10 @@ parser.add_argument("-lf", "--log-file",
 parser.add_argument("-m", "--model-path",
     help = "Path to model you want to use for transcribing",
     default = Path("models") / "ggml-large.bin"
+)
+parser.add_argument("-mn", "--model-name",
+    help = "Name of model (used when enabling WhisperX)",
+    default = "large-v2"
 )
 parser.add_argument("-o", "--output",
     help = "Path to output file, you don't need to give an extension"
@@ -90,15 +104,26 @@ else:
     logger.debug(f"Logging setup, level ${loglevel}")
     logger.info("📝 Start transcribing")
 
-    whisper = WhisperTranscriber(
-        model_path = args.model_path,
-        whisper_path = args.whisper_path,
-        diarize = args.diarize,
-        language = args.language,
-        output_type = args.output_format,
-        whisper_args = args.whisper_args,
-        keep_tmp_file = args.keep_temp_files
-    )
+    if args.engine == "whispercpp":
+        logger.info("📝 Using WhisperCPP engine")
+        whisper = WhisperCppEngine(
+            model_path = args.model_path,
+            whisper_path = args.whisper_path,
+            diarize = args.diarize,
+            language = args.language,
+            output_type = args.output_format,
+            whisper_args = args.whisper_args,
+            keep_tmp_file = args.keep_temp_files
+        )
+    elif args.engine == "whisperx":
+        logger.info("📝 Using WhisperX engine")
+        whisper = WhisperXEngine(
+            model_name = args.model_name,
+            diarize = args.diarize,
+            language = args.language,
+            output_type = args.output_format,
+            whisper_args = args.whisper_args
+        )
 
     if args.url:
         try:
@@ -122,7 +147,11 @@ else:
     except Exception as e:
         msg = f"Transcribe exception: {e}"
         logger.error(msg)
-        sys.exit(msg)
+
+        if args.debug:
+            raise(e)
+        else:
+            sys.exit(msg)
 
     # Delete downloaded file if we've got an URL
     if args.url and not args.keep_temp_files:

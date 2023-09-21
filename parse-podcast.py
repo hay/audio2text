@@ -56,6 +56,7 @@ with open(output_dir / "item.json", "w") as f:
 url = '"' + item["audio_link"] + '"'
 cmd = [
     "./audio2text.py",
+    "--engine", "whisperx",
     "--language", "nl",
     "--url", url,
     "--output-format", "srt,txt,csv",
