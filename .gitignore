@@ -10,3 +10,4 @@ whispercpp
 tmp/*
 log.txt
 out
+.~lock*
